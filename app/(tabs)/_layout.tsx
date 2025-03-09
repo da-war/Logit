@@ -1,45 +1,89 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import { Tabs } from "expo-router";
+import { View, Text, StyleSheet, Pressable } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  withTiming,
+  Easing,
+} from "react-native-reanimated";
+import { useState } from "react";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+export default function AppLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
+        tabBarStyle: styles.tabBar,
+        tabBarShowLabel: false,
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ focused, color }) => (
+            <MaterialCommunityIcons
+              name="home"
+              focused={focused}
+              color={color}
+              size={24}
+            />
+          ),
+          title: "Home",
+        }}
+      />
+
+      <Tabs.Screen
+        name="log"
+        options={{
+          tabBarIcon: ({ focused, color }) => (
+            <MaterialCommunityIcons
+              name="clock"
+              focused={focused}
+              color={color}
+              size={24}
+            />
+          ),
+          title: "Log",
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="account"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          tabBarIcon: ({ focused, color }) => (
+            <MaterialCommunityIcons
+              name="account"
+              focused={focused}
+              color={color}
+              size={24}
+            />
+          ),
+          title: "Account",
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  tabBar: {
+    height: 60,
+    elevation: 8,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: -2 },
+    borderTopWidth: 0,
+  },
+  iconContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  iconText: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#333",
+  },
+  activeIcon: {
+    color: "#D02445",
+    fontWeight: "700",
+  },
+});
